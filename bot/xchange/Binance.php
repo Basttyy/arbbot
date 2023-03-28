@@ -4,6 +4,8 @@ namespace Basttyy\Arbbot\Exchange;
 use Basttyy\Arbbot\CCXTAdapter;
 use Basttyy\Arbbot\CCXTErrorHandler;
 
+use function Basttyy\Arbbot\generateNonce;
+
 define( 'BINANCE_ID', 9 );
 
 class BinanceExchange extends \ccxt\binance {

@@ -33,7 +33,7 @@ abstract class Exchange {
 
     $path = __DIR__ . '/xchange/map.' . $id;
     if ( !is_readable( $path ) ) {
-      throw new \Exception( "Invalid id: '${id}'" );
+      throw new \Exception( "Invalid id: '$id'" );
     }
     return file_get_contents( $path );
 
@@ -42,7 +42,7 @@ abstract class Exchange {
   public static function createFromID( $id ) {
 
     $name = self::getExchangeName( $id );
-    require_once __DIR__ . "/xchange/${name}.php";
+    require_once __DIR__ . "/xchange/$name.php";
     return new $name();
 
   }

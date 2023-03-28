@@ -3,7 +3,6 @@ namespace Basttyy\Arbbot;
 
 use DateTime;
 
-require_once __DIR__ . '/../lib/mysql.php';
 class Database {
 
   const STATISTICS_MAX_AGE = 432000;

@@ -1,6 +1,5 @@
 <?php
-
-require_once __DIR__ . '/Exchange.php';
+namespace Basttyy\Arbbot;
 
 // This class implements the common functionality among exchanges that share a
 // similar API to Bittrex.
@@ -49,7 +48,7 @@ abstract class BittrexLikeExchange extends Exchange {
       $this->queryWithdraw( $coin, $amount, $address, $tag );
       return true;
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       echo( $this->prefix() . "Withdrawal error: " . $ex->getMessage() );
       return false;
     }
@@ -67,7 +66,7 @@ abstract class BittrexLikeExchange extends Exchange {
     try {
       return $this->queryOrder( $tradeable, $currency, 'buy', $rate, $amount );
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       if ( strpos( $ex->getMessage(), '_OFFLINE' ) !== false ) {
         $this->onMarketOffline( $tradeable );
       }
@@ -82,7 +81,7 @@ abstract class BittrexLikeExchange extends Exchange {
     try {
       return $this->queryOrder( $tradeable, $currency, 'sell', $rate, $amount );
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       if ( strpos( $ex->getMessage(), '_OFFLINE' ) !== false ) {
         $this->onMarketOffline( $tradeable );
       }
@@ -296,7 +295,7 @@ abstract class BittrexLikeExchange extends Exchange {
         $data = $this->queryAPI( 'account/getdepositaddress', ['currency' => $coin ] );
         return isset( $data[ 'Address' ] ) ? $data[ 'Address' ] : null;
       }
-      catch ( Exception $ex ) {
+      catch ( \Exception $ex ) {
         if ( strpos( $ex->getMessage(), 'ADDRESS_GENERATING' ) !== false ) {
           // Wait while the address is being generated.
           sleep( 30 );
@@ -409,16 +408,16 @@ abstract class BittrexLikeExchange extends Exchange {
     $data = json_decode( $response, true );
 
     if ( !$data ) {
-      throw new Exception( "Invalid data received: (" . $response . ")" );
+      throw new \Exception( "Invalid data received: (" . $response . ")" );
     }
 
     if ( !key_exists( 'result', $data ) || !key_exists( 'success', $data ) || $data[ 'success' ] != true ) {
 
       if ( key_exists( 'message', $data ) ) {
-        throw new Exception( "API error response: " . $data[ 'message' ] );
+        throw new \Exception( "API error response: " . $data[ 'message' ] );
       }
 
-      throw new Exception( "API error: " . print_r( $data, true ) );
+      throw new \Exception( "API error: " . print_r( $data, true ) );
     }
 
     return $data[ 'result' ];
@@ -449,13 +448,13 @@ abstract class BittrexLikeExchange extends Exchange {
     curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 10 );
     curl_setopt( $ch, CURLOPT_TIMEOUT, 180 );
 
-    $error = null;
+    $error = "";
     for ( $i = 0; $i < 5; $i++ ) {
       try {
         $data = curl_exec( $ch );
         $code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
         if ($code != 200) {
-          throw new Exception( "HTTP ${code} received from server" );
+          throw new \Exception( "HTTP $code received from server" );
         }
         //
 
@@ -467,7 +466,7 @@ abstract class BittrexLikeExchange extends Exchange {
 
         return $this->xtractResponse( $data );
       }
-      catch ( Exception $ex ) {
+      catch ( \Exception $ex ) {
         $error = $ex->getMessage();
         logg( $this->prefix() . $error );
 
@@ -489,7 +488,7 @@ abstract class BittrexLikeExchange extends Exchange {
         continue;
       }
     }
-    throw new Exception( $error );
+    throw new \Exception( $error );
 
   }
 

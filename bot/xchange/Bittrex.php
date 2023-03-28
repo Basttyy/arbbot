@@ -1,7 +1,11 @@
 <?php
+namespace Basttyy\Arbbot\Exchange;
 
-require_once __DIR__ . '/../Config.php';
-require_once __DIR__ . '/../BittrexLikeExchange.php';
+use Basttyy\Arbbot\BittrexLikeExchange;
+use Basttyy\Arbbot\Config;
+
+use function Basttyy\Arbbot\formatBTC;
+use function Basttyy\Arbbot\logg;
 
 class Bittrex extends BittrexLikeExchange {
 
@@ -84,7 +88,7 @@ class Bittrex extends BittrexLikeExchange {
 	$arr = explode( '-', $market );
 	$currency = $arr[ 0 ];
 	$tradeable = $arr[ 1 ];
-	$market = "${currency}_${tradeable}";
+	$market = "$currency"."_"."$tradeable";
 	$amount = $data[ 3 ];
 	$feeFactor = ($data[ 2 ] == 'LIMIT_SELL') ? -1 : 1;
 	$results[ $market ][] = array(
@@ -112,7 +116,7 @@ class Bittrex extends BittrexLikeExchange {
       $arr = explode( '-', $market );
       $currency = $arr[ 0 ];
       $tradeable = $arr[ 1 ];
-      $market = "${currency}_${tradeable}";
+      $market = "$currency"."_"."$tradeable";
       if (!in_array( $market, array_keys( $results ) )) {
         $results[ $market ] = array();
       }
@@ -160,7 +164,7 @@ class Bittrex extends BittrexLikeExchange {
       $this->queryCancelOrder( $orderID );
       return true;
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       if ( strpos( $ex->getMessage(), 'ORDER_NOT_OPEN' ) === false ) {
 	logg( $this->prefix() . "Got an exception in cancelOrder(): " . $ex->getMessage() );
 	return true;

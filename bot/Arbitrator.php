@@ -1,7 +1,5 @@
 <?php
-
-require_once __DIR__ . '/CoinManager.php';
-
+namespace Basttyy\Arbbot;
 class Arbitrator {
 
   private $eventLoop;
@@ -746,7 +744,7 @@ class Arbitrator {
     try {
       $this->loop();
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       logg( "Error during main loop: " . $ex->getMessage() . "\n" . $ex->getTraceAsString() );
     }
 

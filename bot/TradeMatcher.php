@@ -76,12 +76,12 @@ class TradeMatcher {
 
     foreach ( $buyTrades as $trade ) {
       if ( !is_null( $tradeable ) && $tradeable != $trade[ 'tradeable' ] ) {
-        logg( "WARNING: While looking through buy trades, found a ${trade['tradeable']} trade but we first saw $tradeable! Ignoring..." );
+        logg( "WARNING: While looking through buy trades, found a ".$trade['tradeable']." trade but we first saw $tradeable! Ignoring..." );
         continue;
       }
 
       if ( !is_null( $currency ) && $currency != $trade[ 'currency' ] ) {
-        logg( "WARNING: While looking through buy trades, found a ${trade['currency']} trade but we first saw $currency! Ignoring..." );
+        logg( "WARNING: While looking through buy trades, found a ".$trade['currency']." trade but we first saw $currency! Ignoring..." );
         continue;
       }
 

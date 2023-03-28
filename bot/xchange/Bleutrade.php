@@ -1,7 +1,10 @@
 <?php
+namespace Basttyy\Arbbot\Exchange;
 
-require_once __DIR__ . '/../Config.php';
-require_once __DIR__ . '/../BittrexLikeExchange.php';
+use Basttyy\Arbbot\BittrexLikeExchange;
+use Basttyy\Arbbot\Config;
+
+use function Basttyy\Arbbot\logg;
 
 class Bleutrade extends BittrexLikeExchange {
   
@@ -131,7 +134,7 @@ class Bleutrade extends BittrexLikeExchange {
       // Cancellation failed.
       return false;
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       return false;
     }
 

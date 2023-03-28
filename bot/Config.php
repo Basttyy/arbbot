@@ -1,8 +1,6 @@
 <?php
 namespace Basttyy\Arbbot;
 
-require_once __DIR__."/../lib/helpers.php";
-
 class Config {
 
   // DATABASE
@@ -430,7 +428,7 @@ class Config {
         $arr = array_map( 'trim', explode( "=", $line ) );
         $name = $arr[ 0 ];
 	$value = $arr[ 1 ];
-        $inputName = "$currentSection.${arr[0]}";
+        $inputName = $currentSection.$arr[0];
         if (in_array( $inputName, array_keys( $inputs ) ) ) {
           $value = self::quoteValue( $inputs[ $inputName ] );
 	  $output .= "$name = $value$sep";

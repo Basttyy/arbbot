@@ -1,7 +1,16 @@
 <?php
-ini_set("precision", 16);
+namespace Basttyy\Arbbot\Exchange;
 
-require_once __DIR__ . '/../Config.php';
+use Basttyy\Arbbot\Config;
+use Basttyy\Arbbot\Exchange;
+use Basttyy\Arbbot\Orderbook;
+use Basttyy\Arbbot\OrderbookEntry;
+
+use function Basttyy\Arbbot\alert;
+use function Basttyy\Arbbot\formatBTC;
+use function Basttyy\Arbbot\logg;
+
+ini_set("precision", 16);
 
 class Poloniex extends Exchange {
 
@@ -64,7 +73,7 @@ class Poloniex extends Exchange {
       $this->queryWithdraw( $coin, $amount, $address );
       return true;
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       if ( strpos( $ex->getMessage(), 'frozen' ) !== false ) {
         logg( $this->prefix() . "Withdrawals for $amount are frozen, retrying later..." );
         return false;
@@ -105,7 +114,7 @@ class Poloniex extends Exchange {
     try {
       return $this->queryOrder( $tradeable, $currency, 'buy', $rate, $amount );
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       logg( $this->prefix() . "Got an exception in buy(): " . $ex->getMessage() );
       return null;
     }
@@ -116,7 +125,7 @@ class Poloniex extends Exchange {
     try {
       return $this->queryOrder( $tradeable, $currency, 'sell', $rate, $amount );
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       logg( $this->prefix() . "Got an exception in sell(): " . $ex->getMessage() );
       return null;
     }
@@ -125,7 +134,7 @@ class Poloniex extends Exchange {
 
   public function getFilledOrderPrice( $type, $tradeable, $currency, $id ) {
     if (!preg_match( '/^[A-Z0-9_]+:(.*)$/', $id, $matches )) {
-      throw new Exception( $this->prefix() . "Invalid order id: " . $id);
+      throw new \Exception( $this->prefix() . "Invalid order id: " . $id);
     }
     $orderNumber = $matches[ 1 ];
     $market = $currency . "_" . $tradeable;
@@ -246,7 +255,7 @@ class Poloniex extends Exchange {
   public function getRecentOrderTrades( &$arbitrator, $tradeable, $currency, $type, $orderID, $tradeAmount ) {
 
     if (!preg_match( '/^[A-Z0-9_]+:(.*)$/', $orderID, $matches )) {
-      throw new Exception( $this->prefix() . "Invalid order id: " . $orderID );
+      throw new \Exception( $this->prefix() . "Invalid order id: " . $orderID );
     }
     $rawOrderID = $matches[ 1 ];
     $results = $this->queryAPI( 'returnOrderTrades', array(
@@ -322,7 +331,7 @@ class Poloniex extends Exchange {
       $this->queryCancel( $pair, $id );
       return true;
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       if ( strpos( $ex->getMessage(), 'Invalid order number' ) === false ) {
 	logg( $this->prefix() . "Got an exception in cancelOrder(): " . $ex->getMessage() );
 	return true;
@@ -650,7 +659,7 @@ class Poloniex extends Exchange {
     curl_setopt( $ch, CURLOPT_TIMEOUT, 180 );
 
     // run the query
-    $error = null;
+    $error = "";
     for ( $i = 0; $i < 5; $i++ ) {
       $res = curl_exec( $ch );
       $code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
@@ -686,12 +695,12 @@ class Poloniex extends Exchange {
       }
 
       if ( key_exists( 'error', $data ) ) {
-        throw new Exception( $this->prefix() . "API error response: " . $data[ 'error' ] );
+        throw new \Exception( $this->prefix() . "API error response: " . $data[ 'error' ] );
       }
 
       return $data;
     }
-    throw new Exception( $error );
+    throw new \Exception( $error );
 
   }
 

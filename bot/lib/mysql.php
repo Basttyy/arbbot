@@ -1,4 +1,5 @@
 <?php
+namespace Basttyy\Arbbot\Lib;
 /**
  * php7-mysql-shim
  *
