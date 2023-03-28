@@ -1,4 +1,8 @@
 <?php
+namespace Basttyy\Arbbot;
+
+use DateTime;
+
 require_once __DIR__ . '/../lib/mysql.php';
 class Database {
 
@@ -14,12 +18,12 @@ class Database {
     $dbPass = Config::get( Config::DB_PASS, null );
 
     if ( is_null( $dbHost ) || is_null( $dbName ) || is_null( $dbUser ) || is_null( $dbPass ) ) {
-      throw new Exception( 'Database configuration data missing or incomplete' );
+      throw new \Exception( 'Database configuration data missing or incomplete' );
     }
 
     $link = mysql_connect( $dbHost, $dbUser, $dbPass, true );
     if ( !$link ) {
-      throw new Exception( 'database error: ' . mysql_error( $link ) );
+      throw new \Exception( 'database error: ' . mysql_error( $link ) );
     }
     mysql_select_db( $dbName, $link );
     return $link;
@@ -104,7 +108,7 @@ class Database {
     $age = time() - Config::get( Config::MAX_LOG_AGE, Config::DEFAULT_MAX_LOG_AGE ) * 3600;
 
     if ( !mysql_query( sprintf( "DELETE FROM log WHERE created < %d;", $age ), $link ) ) {
-      throw new Exception( "database cleanup error: " . mysql_error( $link ) );
+      throw new \Exception( "database cleanup error: " . mysql_error( $link ) );
     }
 
     $rows = mysql_affected_rows( $link );
@@ -122,7 +126,7 @@ class Database {
     if ( !mysql_query( sprintf( "INSERT INTO alerts (type, message, created) VALUES ('%s', '%s', %d);",
                                 mysql_escape_string( $type ),
                                 mysql_escape_string( strip_tags( $message ) ), time() ), $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     mysql_close( $link );
@@ -134,7 +138,7 @@ class Database {
     $link = self::connect();
 
     if ( !mysql_query( sprintf( "INSERT INTO log (message, created) VALUES ('%s', %d);", mysql_escape_string( strip_tags( $message ) ), time() ), $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     mysql_close( $link );
@@ -152,7 +156,7 @@ class Database {
             $time //
     );
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
   }
@@ -169,7 +173,7 @@ class Database {
     }
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $data = [];
@@ -206,7 +210,7 @@ class Database {
             $time //
     );
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
     mysql_close( $link );
 
@@ -222,7 +226,7 @@ class Database {
             time() //
     );
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
     mysql_close( $link );
 
@@ -251,7 +255,7 @@ class Database {
     );
 
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     mysql_close( $link );
@@ -272,7 +276,7 @@ class Database {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $data = 0;
@@ -297,7 +301,7 @@ class Database {
             time() //
     );
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
     mysql_close( $link );
 
@@ -317,7 +321,7 @@ class Database {
     );
 
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     $query = sprintf( "INSERT INTO pending_deposits (amount, coin, ID_withdrawal, ID_exchange, created) VALUES ('%s', '%s', %s, %d, %d);", //
@@ -329,7 +333,7 @@ class Database {
     );
 
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
     mysql_close( $link );
 
@@ -347,7 +351,7 @@ class Database {
     );
 
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     mysql_close( $link );
@@ -364,7 +368,7 @@ class Database {
     );
 
     if ( !($result = mysql_query( $query, $link )) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     $row = mysql_fetch_assoc( $result );
@@ -383,7 +387,7 @@ class Database {
     );
 
     if ( !($result = mysql_query( $query, $link )) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     $results = [ ];
@@ -407,7 +411,7 @@ class Database {
               mysql_escape_string( $value )
       );
       if ( !mysql_query( $query, $link ) ) {
-        throw new Exception( "database insertion error ($query): " . mysql_error( $link ) );
+        throw new \Exception( "database insertion error ($query): " . mysql_error( $link ) );
       }
     }
 
@@ -423,7 +427,7 @@ class Database {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = [ ];
@@ -454,7 +458,7 @@ class Database {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = [ ];
@@ -484,7 +488,7 @@ class Database {
 
     $data = mysql_query( $query, $link );
     if ( !$data ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $result = null;
@@ -513,7 +517,7 @@ class Database {
 
     $data = mysql_query( $query, $link );
     if ( !$data ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $result = null;
@@ -535,7 +539,7 @@ class Database {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     if ( mysql_num_rows( $result ) < 5 ) {
@@ -564,7 +568,7 @@ class Database {
 
     $result = mysql_query( "SHOW COLUMNS FROM withdrawal LIKE 'address';", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -573,7 +577,7 @@ class Database {
       // Old database format, need to upgrade first.
       $result = mysql_query( "ALTER TABLE withdrawal MODIFY address TEXT NOT NULL;", $link );
       if ( !$result ) {
-        throw new Exception( "database alteration error: " . mysql_error( $link ) );
+        throw new \Exception( "database alteration error: " . mysql_error( $link ) );
       }
     }
 
@@ -587,7 +591,7 @@ class Database {
 
     $result = mysql_query( "SHOW COLUMNS FROM alerts LIKE 'type';", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -596,7 +600,7 @@ class Database {
       // Old database format, need to upgrade first.
       $result = mysql_query( "ALTER TABLE alerts MODIFY `type` ENUM('stuck-transfer','poloniex-withdrawal-limit','duplicate-withdrawal') NOT NULL;", $link );
       if ( !$result ) {
-        throw new Exception( "database alteration error: " . mysql_error( $link ) );
+        throw new \Exception( "database alteration error: " . mysql_error( $link ) );
       }
     }
 
@@ -610,7 +614,7 @@ class Database {
 
     $result = mysql_query( "SHOW COLUMNS FROM management LIKE 'coin';", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $row = mysql_fetch_assoc( $result );
@@ -635,7 +639,7 @@ class Database {
         $result = mysql_query( sprintf( "ALTER TABLE %s MODIFY %s CHAR(10) NOT NULL;",
                                         $table, $field ), $link );
         if ( !$result ) {
-          throw new Exception( "database alteration error: " . mysql_error( $link ) );
+          throw new \Exception( "database alteration error: " . mysql_error( $link ) );
         }
       }
     }
@@ -650,44 +654,44 @@ class Database {
 
     $result = mysql_query( "SHOW COLUMNS FROM track LIKE 'currency';", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     if ( mysql_num_rows( $result ) === 0 ) {
       // Old database format, need to upgrade first.
       $result = mysql_query( "ALTER TABLE track ADD currency CHAR(5) NOT NULL AFTER coin;", $link );
       if ( !$result ) {
-        throw new Exception( "database selection error: " . mysql_error( $link ) );
+        throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
       $result = mysql_query( "UPDATE track SET currency = 'BTC';", $link );
       if ( !$result ) {
-        throw new Exception( "database selection error: " . mysql_error( $link ) );
+        throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
     }
 
     $result = mysql_query( "SHOW COLUMNS FROM track LIKE 'ID_exchange_source';", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     if ( mysql_num_rows( $result ) === 0 ) {
       // Old database format, need to upgrade first.
       $result = mysql_query( "ALTER TABLE track ADD ID_exchange_source INT(11) NOT NULL AFTER profit;", $link );
       if ( !$result ) {
-        throw new Exception( "database selection error: " . mysql_error( $link ) );
+        throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
       $result = mysql_query( "ALTER TABLE track CHANGE ID_exchange ID_exchange_target INT(11) NOT NULL;", $link );
       if ( !$result ) {
-        throw new Exception( "database selection error: " . mysql_error( $link ) );
+        throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
       // We don't know exactly how to fill in the new column, so let's just hope the user hasn't used a third exchange yet.
       $result = mysql_query( "UPDATE track SET ID_exchange_source = 1 WHERE ID_exchange_target = 3;", $link );
       if ( !$result ) {
-        throw new Exception( "database selection error: " . mysql_error( $link ) );
+        throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
       $result = mysql_query( "UPDATE track SET ID_exchange_source = 3 WHERE ID_exchange_target = 1;", $link );
       if ( !$result ) {
-        throw new Exception( "database selection error: " . mysql_error( $link ) );
+        throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
     }
 
@@ -701,7 +705,7 @@ class Database {
 
     $result = mysql_query( "SELECT * FROM stats", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -724,7 +728,7 @@ class Database {
                            "FROM trade, log WHERE message LIKE 'TRADE SUMMARY:\\nPAIR: %' AND trade.created = log.created " .
                            "ORDER BY trade.created DESC", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -742,7 +746,7 @@ class Database {
                        '\n(?:[^\n]+\n)\s*' . $row[ 'currency' ] . '[^\n]+?(-?[0-9.]+)\n' .
                        '(?:[^\n]+\n){2}\n\(Transfer fee is ([0-9.]+)\)/',
                        $message, $matches )) {
-        throw new Exception( "invalid log message encountered: " . $message );
+        throw new \Exception( "invalid log message encountered: " . $message );
       }
       $exchange = Exchange::createFromID( $row[ 'target' ] );
 
@@ -756,7 +760,7 @@ class Database {
       if (empty( $pl_currency )) {
         $pl_currency = $row[ 'currency' ];
       } else if ($row[ 'currency' ] != $pl_currency) {
-        throw new Exception( "P&L currency changed from ${pl_currency} to ${row['currency']} unexpectedly." );
+        throw new \Exception( "P&L currency changed from ${pl_currency} to ${row['currency']} unexpectedly." );
       }
       $data[] = [
         'time' => $row[ 'created' ],
@@ -802,7 +806,7 @@ class Database {
             formatBTC( $tradeableTransferFee ), formatBTC( $currencyTransferFee ), formatBTC( $buyFee ),
             formatBTC( $sellFee ) );
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
     mysql_close( $link );
 
@@ -818,7 +822,7 @@ class Database {
                              "WHERE trade_IDs_buy != '' OR trade_IDs_sell != '' OR raw_trade_IDs_buy != '' OR raw_trade_IDs_sell != '';",
                              $link );
       if ( !$result ) {
-        throw new Exception( "database selection error: " . mysql_error( $link ) );
+        throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
 
       $exchangeMap = [ ];
@@ -854,7 +858,7 @@ class Database {
                                            formatBTC( $row[ 'currency_pl' ] - $diff ), $row[ 'ID' ] ),
                                   $link );
           if ( !$result2 ) {
-            throw new Exception( "database insertion error: " . mysql_error( $link ) );
+            throw new \Exception( "database insertion error: " . mysql_error( $link ) );
           }
         }
       }
@@ -877,7 +881,7 @@ class Database {
              "ORDER BY pl DESC LIMIT 5";
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -905,7 +909,7 @@ class Database {
              $time, $exchangeID, $coin, $currency, $rawTradeID, $tradeID, formatBTC( $rate ), 
              formatBTC( $amount ), formatBTC( $fee ), formatBTC( $total ), $type );
     if ( !mysql_query( $query, $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
     mysql_close( $link );
 
@@ -919,7 +923,7 @@ class Database {
                                 "AND table_name = '%s' LIMIT 1;",
                                 mysql_escape_string( Config::get( Config::DB_NAME, null ) ),
                                 mysql_escape_string( $name ) ), $link ) ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $rows = mysql_affected_rows( $link );
@@ -943,7 +947,7 @@ class Database {
         continue;
       }
       if ( !mysql_query( $q, $link ) ) {
-        throw new Exception( "database insertion error: " . mysql_error( $link ) );
+        throw new \Exception( "database insertion error: " . mysql_error( $link ) );
       }
     }
 
@@ -971,7 +975,7 @@ class Database {
 
     $result = mysql_query( "SELECT ID, created FROM log WHERE message = 'stuckDetection()' ORDER BY created ASC", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -981,7 +985,7 @@ class Database {
 
       $result2 = mysql_query( "SELECT created, message FROM log WHERE ID > $id ORDER BY ID ASC", $link );
       if ( !$result2 ) {
-	throw new Exception( "database selection error: " . mysql_error( $link ) );
+	throw new \Exception( "database selection error: " . mysql_error( $link ) );
       }
 
       while ( $row = mysql_fetch_assoc( $result2 ) ) {
@@ -994,7 +998,7 @@ class Database {
                                          mysql_escape_string( $row[ 'message' ] ) ),
                                 $link );
 	if ( !$result3 ) {
-	  throw new Exception( "database selection error: " . mysql_error( $link ) );
+	  throw new \Exception( "database selection error: " . mysql_error( $link ) );
 	}
       }
     }
@@ -1023,14 +1027,14 @@ class Database {
 
     $result = mysql_query( "SHOW INDEX FROM balances WHERE Key_name = 'coin_ID_exchange';", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $row = mysql_fetch_assoc( $result );
     if ( !$row ) {
       $result = mysql_query( "ALTER TABLE `balances` ADD INDEX `coin_ID_exchange` (`coin`, `ID_exchange`);", $link );
       if ( !$result ) {
-        throw new Exception( "index creation error: " . mysql_error( $link ) );
+        throw new \Exception( "index creation error: " . mysql_error( $link ) );
       }
     }
 
@@ -1082,7 +1086,7 @@ class Database {
    
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $data = self::getSmoothedResultsForGraph( $result );
@@ -1101,7 +1105,7 @@ class Database {
     // We want to iterate over all unique pairs (coin, exchange)
     $result = mysql_query( "SELECT DISTINCT coin, ID_exchange AS exchange FROM snapshot ORDER BY coin ASC, exchange ASC;", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $prevCoin = '';
@@ -1112,7 +1116,7 @@ class Database {
       try {
         $name = Exchange::getExchangeName( $exchange );
       }
-      catch ( Exception $ex ) {
+      catch ( \Exception $ex ) {
       }
       // Poor man's progress bar
       printf( "\rImporting balances for %s on %s", $coin, $name );
@@ -1186,7 +1190,7 @@ class Database {
 
       $result = mysql_query( "DELETE FROM pending_deposits", $link );
       if ( !$result ) {
-        throw new Exception( "database deletion error: " . mysql_error( $link ) );
+        throw new \Exception( "database deletion error: " . mysql_error( $link ) );
       }
 
       $stats[ 'pending_deposits_fixup' ] = 1;
@@ -1213,7 +1217,7 @@ class Database {
 
     $result = mysql_query( "SELECT message, created FROM log WHERE message LIKE 'Withdrawing profit: %' ORDER BY created ASC", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     while ( $row = mysql_fetch_assoc( $result ) ) {
@@ -1243,7 +1247,7 @@ class Database {
                                 formatBTC( $percentRestock * $amount ),
                                 mysql_escape_string( $address ) ),
                         $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     mysql_close( $link );
@@ -1283,7 +1287,7 @@ class Database {
                                   ),
                                   $link
                      ) ) ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $wallets = [ ];
@@ -1301,12 +1305,12 @@ class Database {
     $time = time();
 
     if ( !mysql_query( "START TRANSACTION", $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     try {
       if ( !mysql_query( sprintf( "DELETE FROM wallets WHERE ID_exchange = %d;", $id ), $link ) ) {
-        throw new Exception( "database insertion error: " . mysql_error( $link ) );
+        throw new \Exception( "database insertion error: " . mysql_error( $link ) );
       }
   
       foreach ( $wallets as $coin => $balance ) {
@@ -1315,17 +1319,17 @@ class Database {
                                     $time, mysql_escape_string( $coin ),
                                     formatBTC( $balance ), $id ),
                             $link ) ) {
-          throw new Exception( "database insertion error: " . mysql_error( $link ) );
+          throw new \Exception( "database insertion error: " . mysql_error( $link ) );
         }
       }
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       mysql_query( "ROLLBACK", $link );
       throw $ex;
     }
 
     if ( !mysql_query( "COMMIT", $link ) ) {
-      throw new Exception( "database insertion error: " . mysql_error( $link ) );
+      throw new \Exception( "database insertion error: " . mysql_error( $link ) );
     }
 
     mysql_close( $link );
@@ -1340,7 +1344,7 @@ class Database {
     self::$trades = array( );
 
     if ( !$result = mysql_query( "SELECT raw_trade_ID FROM exchange_trades ", $link ) ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     while ( $row = mysql_fetch_assoc( $result ) ) {

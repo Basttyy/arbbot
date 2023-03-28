@@ -1,9 +1,5 @@
 <?php
-
-require_once 'bot/utils.php';
-require_once 'bot/Config.php';
-require_once 'bot/Exchange.php';
-
+namespace Basttyy\Arbbot;
 class TradeMatcher {
 
   private $exchanges;
@@ -106,12 +102,12 @@ class TradeMatcher {
     }
     foreach ( $sellTrades as $trade ) {
       if ( !is_null( $tradeable ) && $tradeable != $trade[ 'tradeable' ] ) {
-        logg( "WARNING: While looking through sell trades, found a ${trade['tradeable']} trade but we first saw $tradeable! Ignoring..." );
+        logg( "WARNING: While looking through sell trades, found a ".$trade['tradeable']." trade but we first saw $tradeable! Ignoring..." );
         continue;
       }
 
       if ( !is_null( $currency ) && $currency != $trade[ 'currency' ] ) {
-        logg( "WARNING: While looking through sell trades, found a ${trade['currency']} trade but we first saw $currency! Ignoring..." );
+        logg( "WARNING: While looking through sell trades, found a ".$trade['currency']." trade but we first saw $currency! Ignoring..." );
         continue;
       }
 
@@ -175,7 +171,7 @@ class TradeMatcher {
     try {
       $trades = $exchange->getRecentOrderTrades( $arbitrator, $coin, $currency, $type,
                                                  $orderID, $tradeAmount );
-    } catch ( Exception $ex ) {
+    } catch ( \Exception $ex ) {
       logg( "WARNING: Caught exceptin while calling getRecentOrderTrades(): " . $ex->getMessage() );
     }
     foreach ( $trades as $trade ) {

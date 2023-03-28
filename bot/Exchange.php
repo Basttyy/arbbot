@@ -1,8 +1,6 @@
 <?php
+namespace Basttyy\Arbbot;
 ini_set("precision", 16);
-
-require_once __DIR__ . '/Orderbook.php';
-require_once __DIR__ . '/utils.php';
 
 abstract class Exchange {
 
@@ -23,7 +21,7 @@ abstract class Exchange {
 
 
     if ( is_null( $apiKey ) || is_null( $apiSecret ) ) {
-      throw new Exception( $this->prefix() . 'Invalid API key or secret' );
+      throw new \Exception( $this->prefix() . 'Invalid API key or secret' );
     }
 
     $this->apiKey = $apiKey;
@@ -35,7 +33,7 @@ abstract class Exchange {
 
     $path = __DIR__ . '/xchange/map.' . $id;
     if ( !is_readable( $path ) ) {
-      throw new Exception( "Invalid id: '${id}'" );
+      throw new \Exception( "Invalid id: '${id}'" );
     }
     return file_get_contents( $path );
 
@@ -393,7 +391,7 @@ abstract class Exchange {
     }
     curl_setopt( $pubch, CURLOPT_URL, $url );
 
-    $error = null;
+    $error = "";
     // Retry up to five times
     for ( $i = 0; $i < 5; $i++ ) {
 
@@ -401,14 +399,14 @@ abstract class Exchange {
       $code = curl_getinfo( $pubch, CURLINFO_HTTP_CODE );
 
       if ( $data === false || $code != 200 ) {
-        $error = $this->prefix() . "Could not get reply (HTTP ${code}): " . curl_error( $pubch );
+        $error = $this->prefix() . "Could not get reply (HTTP $code): " . curl_error( $pubch );
         logg( $error );
         continue;
       }
 
       return $data;
     }
-    throw new Exception( $error );
+    throw new \Exception( $error );
 
   }
 

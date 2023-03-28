@@ -1,6 +1,8 @@
 <?php
+namespace Basttyy\Arbbot\Exchange;
 
-require_once __DIR__ . '/../CCXTAdapter.php';
+use Basttyy\Arbbot\CCXTAdapter;
+use Basttyy\Arbbot\CCXTErrorHandler;
 
 define( 'BINANCE_ID', 9 );
 

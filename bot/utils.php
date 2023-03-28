@@ -1,6 +1,5 @@
 <?php
-
-require_once __DIR__ . '/Database.php';
+namespace Basttyy\Arbbot;
 
 function formatCoin( $coin ) {
 
@@ -35,13 +34,13 @@ function endsWith( $haystack, $needle ) {
 
 function alert( $type, $message ) {
 
-  database::insertAlert( $type, $message );
+  Database::insertAlert( $type, $message );
 
 }
 
 function logg( $message ) {
 
-  database::log( $message );
+  Database::log( $message );
 
   global $gVerbose;
 

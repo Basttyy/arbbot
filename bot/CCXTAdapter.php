@@ -1,7 +1,5 @@
 <?php
-
-require_once __DIR__ . '/Config.php';
-require_once __DIR__ . '/../lib/composer/vendor/autoload.php';
+namespace Basttyy\Arbbot;
 
 trait CCXTErrorHandler {
 
@@ -10,7 +8,7 @@ trait CCXTErrorHandler {
       try {
         return call_user_func_array( $this->$function, $params );
       }
-      catch ( Exception $ex ) {
+      catch ( \Exception $ex ) {
         // For buy() and sell() functions, convert exceptions into null return values.
         if ( $function == 'create_order' &&
              ( $ex instanceof \ccxt\ExchangeError ||
@@ -195,7 +193,7 @@ abstract class CCXTAdapter extends Exchange {
     $tradeable = $this->coinNames[ $tradeable ];
     $currency = $this->coinNames[ $currency ];
     if (!preg_match( '/^[A-Z0-9_]+:(.*)$/', $id, $matches )) {
-      throw new Exception( $this->prefix() . "Invalid order id: " . $id);
+      throw new \Exception( $this->prefix() . "Invalid order id: " . $id);
     }
     $orderNumber = $matches[ 1 ];
     $result = $this->exchange->fetch_my_trades( $tradeable . '/' . $currency );
@@ -266,7 +264,7 @@ abstract class CCXTAdapter extends Exchange {
   public function getRecentOrderTrades( &$arbitrator, $tradeable, $currency, $type, $orderID, $tradeAmount ) {
 
     if (!preg_match( '/^([A-Z0-9]+)_([A-Z0-9]+):(.*)$/', $orderID, $matches )) {
-      throw new Exception( $this->prefix() . "Invalid order id: " . $orderID );
+      throw new \Exception( $this->prefix() . "Invalid order id: " . $orderID );
     }
     $currency = $matches[ 1 ];
     $tradeable = $matches[ 2 ];
@@ -350,7 +348,7 @@ abstract class CCXTAdapter extends Exchange {
       $this->exchange->cancel_order( $id, $tradeable . '/' . $currency );
       return true;
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       return false;
     }
 

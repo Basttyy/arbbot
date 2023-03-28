@@ -1,4 +1,5 @@
 <?php
+namespace Basttyy\Arbbot;
 
 class Orderbook {
 

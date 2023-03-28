@@ -1,5 +1,5 @@
 <?php
-
+namespace Basttyy\Arbbot;
 class CoinManager {
 
   //
@@ -83,7 +83,7 @@ class CoinManager {
       }
       //
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       logg( "ERROR during management task: " . $ex->getMessage() . "\n" . $ex->getTraceAsString() );
     }
 
@@ -853,7 +853,7 @@ class CoinManager {
     try {
       return $source->withdraw( $coin, $amount, $address, $tag );
     }
-    catch ( Exception $ex ) {
+    catch ( \Exception $ex ) {
       // Perhaps the withdrawal was unsuccessful because of insufficient balance.
       // This can happen if the account only has $amount balance, in which case
       // we need to subtract the withdrawal fee.

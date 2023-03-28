@@ -1,4 +1,5 @@
 <?php
+namespace Basttyy\Arbbot;
 
 require_once __DIR__."/../lib/helpers.php";
 
@@ -244,7 +245,7 @@ class Config {
       // be placed in the parent directory.
       $config = @parse_ini_file( "../config.ini", true );
       if ( !$config ) {
-        throw new Exception( "Configuration not found or invalid!" );
+        throw new \Exception( "Configuration not found or invalid!" );
       }
     }
     self::$config = $config;

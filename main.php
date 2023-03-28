@@ -6,7 +6,7 @@ require_once 'bot/Exchange.php';
 require_once 'bot/Arbitrator.php';
 require_once 'bot/TradeMatcher.php';
 
-require_once 'lib/composer/vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use React\EventLoop;
 
