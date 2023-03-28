@@ -1,0 +1,23 @@
+{
+    "name": "basttyy/arbbot",
+    "description": "Crypto Arbitrage Bot",
+    "type": "project",
+    "license": "GNU",
+    "autoload": {
+        "psr-4": {
+            "Basttyy\\Arbbot\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Abdulbasit",
+            "email": "basttyy@gmail.com"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {
+        "monolog/monolog": "^3.3",
+        "ccxt/ccxt": "^1.53",
+        "react/react": "^1.3"
+    }
+}
