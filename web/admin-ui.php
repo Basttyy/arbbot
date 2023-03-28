@@ -2,6 +2,8 @@
 
 require_once './header.inc.php';
 
+// echo "we returned in admin";
+
 if (!WebDB::isAdminUIEnabled()) {
   exit(-1);
 }

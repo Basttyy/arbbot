@@ -2,6 +2,8 @@
 
 require_once './header.inc.php';
 
+// echo "we returned in ajax";
+
 $func = filter_input( INPUT_GET, 'func' );
 
 switch ($func) {
