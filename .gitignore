@@ -4,4 +4,5 @@ config.ini.[0-9]*
 poloniex-tradeHistory.csv
 web/config.inc.php
 
+/logs/*.log
 /vendor/

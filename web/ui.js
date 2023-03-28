@@ -822,6 +822,7 @@ $(function() {
                     altcoinBalance += parseFloat(altcoinTotals[xid]);
                 });
 
+                
                 htmlData += "TOTAL: ";
                 htmlData += "<a href=\"#\" coin=\"alt_btc\" exchange=\"0\" mode=\"0\" class=\"showGraph\" title=\"Total balance (BTC + Altcoins)\">";
                 htmlData += rnd4(altcoinBalance);
