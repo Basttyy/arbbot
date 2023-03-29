@@ -1,6 +1,5 @@
 <?php
-
-require_once './header.inc.php';
+namespace Basttyy\Web;
 
 $age = filter_input( INPUT_GET, 'age' );
 

@@ -1,14 +1,22 @@
 <?php
 
+require_once __DIR__. '/vendor/autoload.php';
 require_once 'bot/utils.php';
 require_once 'bot/Config.php';
 require_once 'bot/Exchange.php';
 require_once 'bot/Arbitrator.php';
 require_once 'bot/TradeMatcher.php';
+require_once 'bot/xchange/Bittrex.php';
+require_once 'bot/xchange/Poloniex.php';
 
-require_once 'vendor/autoload.php';
-
+use Basttyy\Arbbot\bot\Arbitrator;
+use Basttyy\Arbbot\bot\Config;
+use Basttyy\Arbbot\bot\Database;
+use Basttyy\Arbbot\bot\TradeMatcher;
 use React\EventLoop;
+
+use function Basttyy\Arbbot\bot\installDirectoryDirty;
+use function Basttyy\Arbbot\bot\logg;
 
 $gVerbose = true;
 
@@ -98,14 +106,15 @@ if ( !Database::profitLossTableExists() ) {
 $exchanges = [ ];
 $msg = '';
 
-$gEventLoop = EventLoop\Factory::create();
+$gEventLoop = EventLoop\Loop::get();
 
 foreach ( glob( 'bot/xchange/*.php' ) as $filename ) {
-  $name = basename( $filename, '.php' );
+  $name =  basename( $filename, '.php' );
   logg( "Enabling $name..." );
+  $name = "Basttyy\\Arbbot\\bot\\xchange\\".$name;
   require_once $filename;
   try {
-    $exchanges[] = new $name;
+    $exchanges[] = new $name();
   }
   catch ( Exception $ex ) {
     logg( "$name not configured" );

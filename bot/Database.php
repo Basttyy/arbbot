@@ -1,7 +1,18 @@
 <?php
-namespace Basttyy\Arbbot;
+namespace Basttyy\Arbbot\bot;
+require_once __DIR__."/lib/mysql.php";
 
 use DateTime;
+
+use function Basttyy\Arbbot\bot\Lib\mysql_affected_rows;
+use function Basttyy\Arbbot\bot\Lib\mysql_close;
+use function Basttyy\Arbbot\bot\Lib\mysql_connect;
+use function Basttyy\Arbbot\bot\Lib\mysql_error;
+use function Basttyy\Arbbot\bot\Lib\mysql_escape_string;
+use function Basttyy\Arbbot\bot\Lib\mysql_fetch_assoc;
+use function Basttyy\Arbbot\bot\Lib\mysql_num_rows;
+use function Basttyy\Arbbot\bot\Lib\mysql_query;
+use function Basttyy\Arbbot\bot\Lib\mysql_select_db;
 
 class Database {
 

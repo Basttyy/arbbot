@@ -1,5 +1,5 @@
 <?php
-namespace Basttyy\Arbbot;
+namespace Basttyy\Arbbot\bot;
 
 class Config {
 

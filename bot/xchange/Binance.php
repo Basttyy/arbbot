@@ -1,34 +1,9 @@
 <?php
-namespace Basttyy\Arbbot\Exchange;
+namespace Basttyy\Arbbot\bot\xchange;
 
-use Basttyy\Arbbot\CCXTAdapter;
-use Basttyy\Arbbot\CCXTErrorHandler;
-
-use function Basttyy\Arbbot\generateNonce;
+use Basttyy\Arbbot\bot\CCXTAdapter;
 
 define( 'BINANCE_ID', 9 );
-
-class BinanceExchange extends \ccxt\binance {
-
-  use CCXTErrorHandler;
-
-  public function nonce() {
-    return generateNonce( BINANCE_ID );
-  }
-
-  public function describe() {
-
-    $info = parent::describe();
-    if ( !is_array( @$info[ 'api' ][ 'web' ][ 'post' ] ) ) {
-      $info[ 'api' ][ 'web' ][ 'post' ] = array( );
-    }
-    // Define a private Binance API
-    $info[ 'api' ][ 'web' ][ 'post' ][] = 'assetWithdraw/getAsset.html';
-
-    return $info;
-
-  }
-};
 
 class Binance extends CCXTAdapter {
 
@@ -36,7 +11,7 @@ class Binance extends CCXTAdapter {
     $extraOptions = array(
       'recvWindow' => 15 * 1000, // Increase recvWindow to 15 seconds.
     );
-    parent::__construct( BINANCE_ID, 'Binance', 'BinanceExchange', $extraOptions );
+    parent::__construct( BINANCE_ID, "Basttyy\\Arbbot\\bot\\Exchange\\Binance", "Basttyy\\Arbbot\\bot\\Exchange\\BinanceExchange", $extraOptions );
   }
 
   public function getRateLimit() {

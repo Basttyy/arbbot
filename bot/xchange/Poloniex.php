@@ -1,14 +1,14 @@
 <?php
-namespace Basttyy\Arbbot\Exchange;
+namespace Basttyy\Arbbot\bot\xchange;
 
-use Basttyy\Arbbot\Config;
-use Basttyy\Arbbot\Exchange;
-use Basttyy\Arbbot\Orderbook;
-use Basttyy\Arbbot\OrderbookEntry;
+use Basttyy\Arbbot\bot\Config;
+use Basttyy\Arbbot\bot\Exchange;
+use Basttyy\Arbbot\bot\Orderbook;
+use Basttyy\Arbbot\bot\OrderbookEntry;
 
-use function Basttyy\Arbbot\alert;
-use function Basttyy\Arbbot\formatBTC;
-use function Basttyy\Arbbot\logg;
+use function Basttyy\Arbbot\bot\alert;
+use function Basttyy\Arbbot\bot\formatBTC;
+use function Basttyy\Arbbot\bot\logg;
 
 ini_set("precision", 16);
 

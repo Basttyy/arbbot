@@ -1,8 +1,8 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once "./header.inc.php";
 
-require_once './header.inc.php';
-
-// echo "we returned in ajax";
+use Basttyy\Web\WebDB;
 
 $func = filter_input( INPUT_GET, 'func' );
 

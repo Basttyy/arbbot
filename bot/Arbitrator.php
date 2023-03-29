@@ -1,5 +1,8 @@
 <?php
-namespace Basttyy\Arbbot;
+namespace Basttyy\Arbbot\bot;
+
+use React\EventLoop\LoopInterface;
+
 class Arbitrator {
 
   private $eventLoop;
@@ -13,7 +16,7 @@ class Arbitrator {
   private $nextCoinUpdate = 0;
   private $tradeHappened = false;
 
-  function __construct( $loop, $exchanges, &$tradeMatcher ) {
+  function __construct(LoopInterface $loop, $exchanges, &$tradeMatcher ) {
     $this->eventLoop = $loop;
     $self = $this;
     $this->eventLoop->addPeriodicTimer( 1, function() use($self) {

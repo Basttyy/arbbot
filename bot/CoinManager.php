@@ -1,5 +1,8 @@
 <?php
-namespace Basttyy\Arbbot;
+namespace Basttyy\Arbbot\bot;
+
+use function Basttyy\Arbbot\bot\Lib\mysql_close;
+
 class CoinManager {
 
   //

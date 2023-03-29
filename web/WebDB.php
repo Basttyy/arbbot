@@ -1,17 +1,27 @@
 <?php
+namespace Basttyy\Web;
+require_once './config.inc.php';
+require_once '../bot/Config.php';
+require_once '../bot/lib/mysql.php';
 
-require_once __DIR__ . '/../lib/mysql.php';
-require_once __DIR__ . '/config.inc.php';
-require_once __DIR__ . '/../bot/utils.php';
-require_once __DIR__ . '/../bot/Config.php';
-require_once __DIR__ . '/../bot/Exchange.php';
+use Basttyy\Arbbot\bot\Config;
+use Basttyy\Arbbot\bot\Database;
+
+use function Basttyy\Arbbot\bot\formatBTC;
+use function Basttyy\Arbbot\bot\Lib\mysql_close;
+use function Basttyy\Arbbot\bot\Lib\mysql_connect;
+use function Basttyy\Arbbot\bot\Lib\mysql_error;
+use function Basttyy\Arbbot\bot\Lib\mysql_escape_string;
+use function Basttyy\Arbbot\bot\Lib\mysql_fetch_assoc;
+use function Basttyy\Arbbot\bot\Lib\mysql_query;
+use function Basttyy\Arbbot\bot\Lib\mysql_select_db;
 
 date_default_timezone_set( "UTC" );
 
 try {
   Config::refresh();
 }
-catch ( Exception $ex ) {
+catch ( \Exception $ex ) {
   return;
 }
 
@@ -22,12 +32,12 @@ class WebDB {
     global $dbHost, $dbName, $dbUser, $dbPass;
 
     if ( is_null( $dbHost ) || is_null( $dbName ) || is_null( $dbUser ) || is_null( $dbPass ) ) {
-      throw new Exception( 'Database configuration data missing or incomplete' );
+      throw new \Exception( 'Database configuration data missing or incomplete' );
     }
 
     $link = mysql_connect( $dbHost, $dbUser, $dbPass, true );
     if ( !$link ) {
-      throw new Exception( 'database error: ' . mysql_error( $link ) );
+      throw new \Exception( 'database error: ' . mysql_error( $link ) );
     }
     mysql_select_db( $dbName, $link );
     return $link;
@@ -48,7 +58,7 @@ class WebDB {
     $query = sprintf( "SELECT * FROM log WHERE created > %d", $last );
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = [ ];
@@ -68,7 +78,7 @@ class WebDB {
     $query = "SELECT created, message FROM alerts WHERE created >= UNIX_TIMESTAMP() - 24 * 3600 ORDER BY ID ASC";
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = [ ];
@@ -111,7 +121,7 @@ class WebDB {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $data = [ ];
@@ -149,7 +159,7 @@ class WebDB {
           $ex = Exchange::createFromID( $id );
           $ex->refreshWallets();
           $walletsMap[ $id ] = $ex->getWalletsConsideringPendingDeposits();
-        } catch ( Exception $ex ) {
+        } catch ( \Exception $ex ) {
           // Ignore
         }
       }
@@ -188,7 +198,7 @@ class WebDB {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $age = 0;
@@ -240,7 +250,7 @@ class WebDB {
 
     $data = mysql_query( $query, $link );
     if ( !$data ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $result = 0;
@@ -261,7 +271,7 @@ class WebDB {
     $query = sprintf( "SELECT * FROM trade ORDER BY created DESC LIMIT 20" );
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -288,7 +298,7 @@ class WebDB {
     $query = sprintf( "SELECT * FROM management ORDER BY created DESC LIMIT 20" );
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -314,7 +324,7 @@ class WebDB {
     $query = sprintf( "SELECT * FROM withdrawal ORDER BY created DESC LIMIT 20" );
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -346,7 +356,7 @@ class WebDB {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $row = mysql_fetch_assoc( $result );
@@ -369,7 +379,7 @@ class WebDB {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $row = mysql_fetch_assoc( $result );
@@ -387,7 +397,7 @@ class WebDB {
 
     $result = mysql_query( "SELECT * FROM stats", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -417,7 +427,7 @@ class WebDB {
                                     ( $mode == "summary" ) ? 'WHERE UNIX_TIMESTAMP() - created < 24 * 60 * 60 ' : ''
                            ), $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();
@@ -448,7 +458,7 @@ class WebDB {
     $result = mysql_query( "SELECT SUM(currency_pl) AS total_pl " .
                            "FROM profit_loss;", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $row = mysql_fetch_assoc( $result );
@@ -457,7 +467,7 @@ class WebDB {
     $result = mysql_query( "SELECT SUM(amount) AS realized_pl " .
                            "FROM profits;", $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $row = mysql_fetch_assoc( $result );
@@ -506,7 +516,7 @@ class WebDB {
 
     $result = mysql_query( $query, $link );
     if ( !$result ) {
-      throw new Exception( "database selection error: " . mysql_error( $link ) );
+      throw new \Exception( "database selection error: " . mysql_error( $link ) );
     }
 
     $results = array();

@@ -1,6 +1,9 @@
 <?php
-
 require_once './WebDB.php';
+require_once '../bot/Config.php';
+require_once '../bot/lib/mysql.php';
+
+use Basttyy\Arbbot\bot\Config;
 
 header( 'Cache-Control: no-cache, must-revalidate' );
 header( 'Expires: Mon, 26 Jul 1997 05:00:00 GMT' );

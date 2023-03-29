@@ -1,5 +1,5 @@
 <?php
-namespace Basttyy\Arbbot;
+namespace Basttyy\Arbbot\bot;
 ini_set("precision", 16);
 
 abstract class Exchange {

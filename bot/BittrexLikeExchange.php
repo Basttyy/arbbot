@@ -1,5 +1,5 @@
 <?php
-namespace Basttyy\Arbbot;
+namespace Basttyy\Arbbot\bot;
 
 // This class implements the common functionality among exchanges that share a
 // similar API to Bittrex.

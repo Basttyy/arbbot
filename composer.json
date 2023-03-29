@@ -5,7 +5,7 @@
     "license": "GNU",
     "autoload": {
         "psr-4": {
-            "Basttyy\\Arbbot\\": "bot/",
+            "Basttyy\\Arbbot\\bot": "bot/",
             "Basttyy\\Arbbot\\Web": "web/"
         }
     },

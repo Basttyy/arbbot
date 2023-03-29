@@ -1,5 +1,4 @@
 <?php
-namespace Basttyy\Arbbot\Lib;
 /**
  * php7-mysql-shim
  *
@@ -19,7 +18,7 @@ namespace Basttyy\Arbbot\Lib;
  * queries (@see http://php.net/manual/en/pdo.prepared-statements.php) to
  * ensure you are securely interacting with your database.
  */
-namespace {
+namespace Basttyy\Arbbot\bot\Lib {
 
     if (!extension_loaded('mysql')) {
         if (!extension_loaded('mysqli')) {
@@ -65,7 +64,7 @@ namespace {
             /* No flags, means we can use mysqli_connect() */
             if ($flags === 0) {
                 $conn = mysqli_connect($hostname, $username, $password);
-                if (!$conn instanceof mysqli) {
+                if (!$conn instanceof \mysqli) {
                     return false;
                 }
                 \Dshafik\MySQL::$last_connection = $conn;
@@ -143,7 +142,7 @@ namespace {
             }
 
             if ($isDefault) {
-                Dshafik\MySQL::$last_connection = null;
+                \Dshafik\MySQL::$last_connection = null;
             }
 
             return $return;
